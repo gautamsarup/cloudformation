@@ -1,0 +1,73 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  S3BucketName:
+    Description: Enter S3 Bucket Name
+    Type: String
+    MinLength: 3
+    AllowedPattern: '^[A-Za-z0-9_-]*$'
+    Default: team3cfpracticum1612
+  IAMRoleName:
+    Description: Enter IAM role name
+    Type: String
+    MinLength: 3
+    AllowedPattern: "^[A-Za-z0-9_-]*$"
+    Default: "myLambdaExecutionRole"
+  LambdaFunctionName:
+    Description: Enter Lambda function name
+    Type: String
+    MinLength: 3
+    AllowedPattern: "^[A-Za-z0-9_-]*$"
+    Default: "myLambdaS3function"
+Resources:
+  mys3bucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: !Ref S3BucketName
+      NotificationConfiguration:
+        LambdaConfigurations:
+          - Function: !GetAtt myLambdaFunction.Arn
+            Event: s3:ObjectCreated:*
+    DependsOn:
+    - myLambdaFunction
+
+  LambdaInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt myLambdaFunction.Arn
+      Action: lambda:InvokeFunction
+      Principal: s3.amazonaws.com
+      SourceAccount: !Ref AWS::AccountId
+      SourceArn: !GetAtt mys3bucket.Arn
+
+  myLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Ref LambdaFunctionName
+      Handler: index.lambda_handler
+      Runtime: python3.8
+      Role: arn:aws:iam::219553370879:role/myLambdaS3
+      Code:
+        ZipFile: |
+          import json
+          import urllib.parse
+          import boto3
+
+          print('Loading function')
+
+          s3 = boto3.client('s3')
+
+
+          def lambda_handler(event, context):
+              #print("Received event: " + json.dumps(event, indent=2))
+
+              # Get the object from the event and show its content type
+              bucket = event['Records'][0]['s3']['bucket']['name']
+              key = urllib.parse.unquote_plus(event['Records'][0]['s3']['object']['key'], encoding='utf-8')
+              try:
+                  response = s3.get_object(Bucket=bucket, Key=key)
+                  print("CONTENT TYPE: " + response['ContentType'])
+                  return response['ContentType']
+              except Exception as e:
+                  print(e)
+                  print('Error getting object {} from bucket {}. Make sure they exist and your bucket is in the same region as this function.'.format(key, bucket))
+                  raise e
