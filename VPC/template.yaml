@@ -8,8 +8,8 @@ Parameters:
     Description: Enter S3 Bucket Name
     Type: String
     MinLength: 3
-    MaxLength: 10
     AllowedPattern: '^[A-Za-z0-9_-]*$'
+    Default: "cloudpracticum1612"
 Resources:
   myVPC:
     Type: 'AWS::EC2::VPC'

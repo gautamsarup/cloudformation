@@ -30,14 +30,45 @@ Resources:
     DependsOn:
     - myLambdaFunction
 
+  myLambdaIAMRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      Policies:
+        - PolicyName: lambdas3
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 's3:GetBucketNotification'
+                  - 's3:PutBucketNotification'
+                Resource: !Sub 'arn:aws:s3:::${S3BucketName}'
+              - Effect: Allow
+                Action:
+                  - 'logs:CreateLogGroup'
+                  - 'logs:CreateLogStream'
+                  - 'logs:PutLogEvents'
+                Resource: 'arn:aws:logs:*:*:*'
+
+
   LambdaInvokePermission:
-    Type: AWS::Lambda::Permission
+    Type: 'AWS::Lambda::Permission'
     Properties:
       FunctionName: !GetAtt myLambdaFunction.Arn
-      Action: lambda:InvokeFunction
+      Action: 'lambda:InvokeFunction'
       Principal: s3.amazonaws.com
-      SourceAccount: !Ref AWS::AccountId
-      SourceArn: !GetAtt mys3bucket.Arn
+      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !Sub 'arn:aws:s3:::${S3BucketName}'
 
   myLambdaFunction:
     Type: AWS::Lambda::Function
@@ -45,7 +76,7 @@ Resources:
       FunctionName: !Ref LambdaFunctionName
       Handler: index.lambda_handler
       Runtime: python3.8
-      Role: arn:aws:iam::219553370879:role/myLambdaS3
+      Role: !GetAtt myLambdaIAMRole.Arn
       Code:
         ZipFile: |
           import json

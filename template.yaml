@@ -1,0 +1,10 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  VPC:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: VPC/template.yaml
+  LambdaS3:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: LambdaS3/template.yaml
