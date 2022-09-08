@@ -102,3 +102,14 @@ Resources:
                   print(e)
                   print('Error getting object {} from bucket {}. Make sure they exist and your bucket is in the same region as this function.'.format(key, bucket))
                   raise e
+Outputs:
+  Lambda:
+    Description: Lambda S3 
+    Export:
+      Name: !Sub ${AWS::StackName}-Lambda
+    Value: !Ref myLambdaFunction
+  S3:
+    Description: S3 
+    Export:
+      Name: !Sub ${AWS::StackName}-S3
+    Value: !Ref mys3bucket
