@@ -3,7 +3,7 @@ Resources:
   VPC:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.us-east-1.amazonaws.com/nestedstackscf161281/63163703e72401404c43b7722c47ff20.template
+      TemplateURL: https://s3.us-east-1.amazonaws.com/nestedstackscf161281/8aeed9daad2f1c1ef572fa00b303c7fe.template
   LambdaS3:
     Type: AWS::CloudFormation::Stack
     Properties:

@@ -4,12 +4,12 @@ Parameters:
     Description: The name of the VPC being created.
     Type: String
     Default: "Team3"
-  S3BucketName:
-    Description: Enter S3 Bucket Name
-    Type: String
-    MinLength: 3
-    AllowedPattern: '^[A-Za-z0-9_-]*$'
-    Default: "cloudpracticum1612"
+  # S3BucketName:
+  #   Description: Enter S3 Bucket Name
+  #   Type: String
+  #   MinLength: 3
+  #   AllowedPattern: '^[A-Za-z0-9_-]*$'
+  #   Default: "cloudpracticum1612"
 Resources:
   myVPC:
     Type: 'AWS::EC2::VPC'
@@ -21,9 +21,7 @@ Resources:
         -
           Key: "Name"
           Value: !Ref 'VPCName'
-    Metadata:
-      'AWS::CloudFormation::Designer':
-        id: 38392017-b8cd-4203-8d87-3b83b24942c8
+
   PublicSubnet:
     Type: 'AWS::EC2::Subnet'
     Properties:
@@ -34,9 +32,7 @@ Resources:
         -
           Key: "Name"
           Value: !Ref 'VPCName'
-    Metadata:
-      'AWS::CloudFormation::Designer':
-        id: 367e585e-cfd8-4ae0-a3e1-eb7def7b4688
+
   PrivateSubnet:
     Type: 'AWS::EC2::Subnet'
     Properties:
@@ -47,18 +43,13 @@ Resources:
         -
           Key: "Name"
           Value: !Ref 'VPCName'
-    Metadata:
-      'AWS::CloudFormation::Designer':
-        id: 367e585e-cfd8-4ae0-a3e1-eb7def7b4688
+
   myVPCGatewayAttachment:
     Type: 'AWS::EC2::VPCGatewayAttachment'
     Properties:
       InternetGatewayId: !Ref myGateway
       VpcId: !Ref myVPC
 
-    Metadata:
-      'AWS::CloudFormation::Designer':
-        id: 33524982-9b36-402b-8266-622b7fe0547d
   myGateway:
     Type: 'AWS::EC2::InternetGateway'
     Properties:
@@ -66,9 +57,7 @@ Resources:
         -
           Key: "Name"
           Value: !Ref 'VPCName'
-    Metadata:
-      'AWS::CloudFormation::Designer':
-        id: 8ca028cd-73c3-4f64-b0a5-2967dddc51a5
+ 
   myRouteTable:
     Type: 'AWS::EC2::RouteTable'
     Properties:
@@ -77,9 +66,7 @@ Resources:
         -
           Key: "Name"
           Value: !Ref 'VPCName'
-    Metadata:
-      'AWS::CloudFormation::Designer':
-        id: ebc967e2-4c76-4501-b7e3-b8c8896dc7c7
+
   mySubnetRouteTableAssociation:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
@@ -92,87 +79,13 @@ Resources:
       RouteTableId: !Ref myRouteTable
       GatewayId: !Ref myGateway
       DestinationCidrBlock: 0.0.0.0/0
-    Metadata:
-      'AWS::CloudFormation::Designer':
-        id: 0f721165-f962-455a-9469-7ff0623bfc0e
     DependsOn:
       - myVPCGatewayAttachment
-  MyS3Bucket:
-    Type: 'AWS::S3::Bucket'
-    Properties:
-      BucketName: !Ref S3BucketName
-Metadata:
-  'AWS::CloudFormation::Designer':
-    367e585e-cfd8-4ae0-a3e1-eb7def7b4688:
-      size:
-        width: 400
-        height: 200
-      position:
-        x: 310
-        'y': 160
-      z: 2
-      parent: 38392017-b8cd-4203-8d87-3b83b24942c8
-      embeds:
-        - ebc967e2-4c76-4501-b7e3-b8c8896dc7c7
-    38392017-b8cd-4203-8d87-3b83b24942c8:
-      size:
-        width: 490
-        height: 290
-      position:
-        x: 270
-        'y': 90
-      z: 1
-      embeds:
-        - 367e585e-cfd8-4ae0-a3e1-eb7def7b4688
-    8ca028cd-73c3-4f64-b0a5-2967dddc51a5:
-      size:
-        width: 60
-        height: 60
-      position:
-        x: 100
-        'y': 40
-      z: 0
-      embeds: []
-    33524982-9b36-402b-8266-622b7fe0547d:
-      source:
-        id: 38392017-b8cd-4203-8d87-3b83b24942c8
-      target:
-        id: 8ca028cd-73c3-4f64-b0a5-2967dddc51a5
-      z: 1
-    ebc967e2-4c76-4501-b7e3-b8c8896dc7c7:
-      size:
-        width: 280
-        height: 150
-      position:
-        x: 370
-        'y': 190
-      z: 3
-      parent: 367e585e-cfd8-4ae0-a3e1-eb7def7b4688
-      embeds:
-        - 0f721165-f962-455a-9469-7ff0623bfc0e
-    0f721165-f962-455a-9469-7ff0623bfc0e:
-      size:
-        width: 60
-        height: 60
-      position:
-        x: 446.36924461947353
-        'y': 230.6945155268692
-      z: 4
-      parent: ebc967e2-4c76-4501-b7e3-b8c8896dc7c7
-      embeds: []
-      isassociatedwith:
-        - 8ca028cd-73c3-4f64-b0a5-2967dddc51a5
-      iscontainedinside:
-        - ebc967e2-4c76-4501-b7e3-b8c8896dc7c7
-        - ebc967e2-4c76-4501-b7e3-b8c8896dc7c7
-      dependson:
-        - 33524982-9b36-402b-8266-622b7fe0547d
-    465b2c1a-3135-43e8-91c7-02d035915b07:
-      source:
-        id: 0f721165-f962-455a-9469-7ff0623bfc0e
-      target:
-        id: 8ca028cd-73c3-4f64-b0a5-2967dddc51a5
-      z: 6
+  # MyS3Bucket:
+  #   Type: 'AWS::S3::Bucket'
+  #   Properties:
+  #     BucketName: !Ref S3BucketName
+
 Outputs:
   VPC:
     Description: VPC
