@@ -186,7 +186,7 @@ Outputs:
       Name: !Sub ${AWS::StackName}-PublicSubnet
     Value: !Ref PublicSubnet
 
-  PublicSubnet:
+  PrivateSubnet:
     Description: PrivateSubnet
     Export:
       Name: !Sub ${AWS::StackName}-PrivateSubnet
