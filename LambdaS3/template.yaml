@@ -18,6 +18,7 @@ Parameters:
     MinLength: 3
     AllowedPattern: "^[A-Za-z0-9_-]*$"
     Default: "myLambdaS3function"
+
 Resources:
   mys3bucket:
     Type: 'AWS::S3::Bucket'
@@ -102,10 +103,7 @@ Resources:
                   print(e)
                   print('Error getting object {} from bucket {}. Make sure they exist and your bucket is in the same region as this function.'.format(key, bucket))
                   raise e
-      # VpcConfig:
-      #   SubnetIds:
-          # - subnet-071f712345678e7c8
-          # - subnet-07fd123456788a036
+        
 Outputs:
   Lambda:
     Description: Lambda S3 
